@@ -1,0 +1,36 @@
+[package]
+name = "conways-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["Hans D. Escobar H. <escobar.hans@gmail.com>"]
+description = "wasm lib of Conway's game"
+licence = "MIT"
+
+# cdylib for *.wasm
+# rlib is necesary to perform unit tests with wasm-pack test
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2.83"
+console_error_panic_hook = { version = "0.1.7", optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.33"
+
+[features]
+default = ["console_error_panic_hook"]
+
+[profile.release]
+lto = true # link-time-optimization. Gives to the LLVM more oportunities to make the code smaller and faster. Default in release is false
+opt-level= 3 # Set the goal of LLVM, default in release is 3
+
+[profile.dev]
+lto = true # default in dev is false
+opt-level = 1 # default in dev is 0
+
+
+# example of custom profile
+[profile.release-custom-example]
+inherits = "release"
+opt-level = 2

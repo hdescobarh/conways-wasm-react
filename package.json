@@ -1,0 +1,48 @@
+{
+  "name": "conways-game",
+  "version": "0.1.0",
+  "description": "An implementation of Conway's game on WASM and React",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "wasm",
+    "react",
+    "conway"
+  ],
+  "author": "Hans D. Escobar H.",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm dist/bundle.js",
+    "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
+    "start": "webpack serve --mode development",
+    "wasm-test": "cd wasm_module && wasm-pack test --chrome",
+    "wasm-build-dev": "cd wasm_module && wasm-pack build --dev --out-dir pkg",
+    "wasm-build-prod": "cd wasm_module && wasm-pack build --release --out-dir pkg",
+    "wasm-refresh-module": "rm -Force ./node_modules/conways-wasm && npm run wasm-build-dev && npm run install conways-wasm"
+
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.2.4"
+  },
+  "devDependencies": {
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "@babel/preset-react": "^7.18.6",
+    "babel-loader": "^9.1.2",
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "webpack-dev-server": "^4.11.1",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.1",
+    "eslint": "^8.31.0",
+    "eslint-plugin-react": "^7.32.0",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss-loader": "^7.0.2",
+    "autoprefixer": "^10.4.13",
+    "file-loader": "^6.2.0",
+    "prettier": "^2.8.2"
+  }
+}
