@@ -1,8 +1,41 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.eol": "auto",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.useEditorConfig": true,
+    "prettier.singleAttributePerLine": true,
+    "editor.formatOnSave": true,
+    "reactSnippets.settings.prettierEnabled": false,
+    "npm-intellisense.importES6": false,
+    "eslint.alwaysShowStatus": true,
+    "eslint.format.enable": false,
+    "[rust]": {
+      "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "rust-analyzer.linkedProjects": ["wasm_module//Cargo.toml"],
+    "rust-analyzer.cargo.buildScripts.invocationLocation": "root",
+    "rust-analyzer.checkOnSave.invocationLocation": "root",
+    "rust-analyzer.debug.engine": "vadimcn.vscode-lldb",
+    "rust-analyzer.restartServerOnConfigChange": true,
+    "eslint.probe": ["javascript", "javascriptreact", "html", "markdown"]
+  },
+  "extensions": {
+    "recommendations": [
+      "mgmcdermott.vscode-language-babel",
+      "dsznajder.es7-react-js-snippets",
+      "dbaeumer.vscode-eslint",
+      "visualstudioexptteam.vscodeintellicode",
+      "christian-kohler.npm-intellisense",
+      "esbenp.prettier-vscode",
+      "rust-lang.rust-analyzer",
+      "sonarsource.sonarlint-vscode",
+      "pflannery.vscode-versionlens",
+      "vadimcn.vscode-lldb"
+    ]
+  }
 }
