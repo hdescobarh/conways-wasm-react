@@ -3,7 +3,7 @@ name = "conways-wasm"
 version = "0.1.0"
 edition = "2021"
 authors = ["Hans D. Escobar H. <escobar.hans@gmail.com>"]
-description = "wasm lib of Conway's game"
+description = "wasm lib of Conway's game of Life"
 licence = "MIT"
 
 # cdylib for *.wasm
