@@ -35,7 +35,8 @@
       "rust-lang.rust-analyzer",
       "sonarsource.sonarlint-vscode",
       "pflannery.vscode-versionlens",
-      "vadimcn.vscode-lldb"
+      "vadimcn.vscode-lldb",
+      "bradlc.vscode-tailwindcss"
     ]
   }
 }
