@@ -1,8 +1,7 @@
-mod utils;
+use std::process::abort;
+#[cfg(test)]
+pub mod tests;
+pub mod universe;
+pub mod utils;
 
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-pub fn add_unumbers(left: usize, right: usize) -> Option<usize> {
-    left.checked_add(right)
-}
+//use wasm_bindgen::prelude::*;
