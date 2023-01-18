@@ -79,7 +79,7 @@ fn test_universe_read() {
 }
 
 #[test]
-fn test_universe_single_time_step() {
+fn universe_single_time_step() {
     let init_space = vec![
         true, true, false, false, false, true, true, false, false, false, false, false, true,
         false, false, false, false, false, false, false, false, false, false, false, false,
@@ -91,4 +91,133 @@ fn test_universe_single_time_step() {
     let mut universe = Universe::new(5, 5, init_space);
     universe.time_step();
     assert_eq!(space_one, *universe.get_space_raw());
+}
+
+#[test]
+fn universe_pattern_a() {
+    // empty after 2 steps
+    let init_space = vec![
+        false, true, false, false, false, true, false, false, false, false, true, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t1 = vec![
+        false, false, false, false, false, true, true, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t2 = vec![false; 25];
+
+    let mut universe = Universe::new(5, 5, init_space);
+    universe.time_step();
+    assert_eq!(space_t1, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_t2, *universe.get_space_raw());
+}
+
+#[test]
+fn universe_pattern_b() {
+    // cyclic with period 2
+    let init_space = vec![
+        false, false, false, false, false, false, true, false, false, false, false, true, false,
+        false, false, false, true, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t0 = init_space.clone();
+
+    let space_t1 = vec![
+        false, false, false, false, false, false, false, false, false, false, true, true, true,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+    let mut universe = Universe::new(5, 5, init_space);
+    universe.time_step();
+    assert_eq!(space_t1, *universe.get_space_raw());
+    // other cycle
+    universe.time_step();
+    assert_eq!(space_t0, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_t1, *universe.get_space_raw());
+    //other cycle
+    universe.time_step();
+    assert_eq!(space_t0, *universe.get_space_raw());
+}
+
+#[test]
+fn universe_pattern_c() {
+    // stable after first step
+    let init_space = vec![
+        true, true, false, false, false, true, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_tn = vec![
+        true, true, false, false, false, true, true, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let mut universe = Universe::new(5, 5, init_space);
+    universe.time_step();
+    assert_eq!(space_tn, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_tn, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_tn, *universe.get_space_raw());
+}
+
+#[test]
+fn universe_pattern_d() {
+    // empty after 2 steps
+    let init_space = vec![
+        false, false, false, false, false, false, false, true, false, false, false, true, false,
+        false, false, true, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t1 = vec![
+        false, false, false, false, false, false, false, false, false, false, false, true, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t2 = vec![false; 25];
+
+    let mut universe = Universe::new(5, 5, init_space);
+    universe.time_step();
+    assert_eq!(space_t1, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_t2, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_t2, *universe.get_space_raw());
+}
+
+#[test]
+fn universe_pattern_e() {
+    // stable after 3 steps
+    let init_space = vec![
+        false, false, false, false, false, true, true, true, false, false, true, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t1 = vec![
+        false, true, false, false, false, true, true, false, false, false, true, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_t2 = vec![
+        true, true, false, false, false, true, true, false, false, false, true, true, false, false,
+        false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let space_tn = vec![
+        true, true, false, false, false, false, false, true, false, true, true, true, false, false,
+        false, false, false, false, false, false, false, false, false, false, false,
+    ];
+
+    let mut universe = Universe::new(5, 5, init_space);
+    universe.time_step();
+    assert_eq!(space_t1, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_t2, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_tn, *universe.get_space_raw());
+    universe.time_step();
+    assert_eq!(space_tn, *universe.get_space_raw());
 }

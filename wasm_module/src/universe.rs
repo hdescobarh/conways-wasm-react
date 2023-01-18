@@ -8,10 +8,10 @@ pub struct Universe {
     space: Vec<bool>,
     next_space: Vec<bool>,
     age: usize,
-    pub observer: Observer,
+    observer: Observer,
     max_col: usize,
     max_row: usize,
-    pub col_buffer: Vec<usize>,
+    col_buffer: Vec<usize>,
 }
 
 impl Universe {
