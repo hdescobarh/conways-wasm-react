@@ -3,21 +3,20 @@ use std::mem::{swap, take};
 pub struct Universe {
     height: usize,
     width: usize,
-    semiperimeter: usize,
     size: usize,
     // An 1D array of fixed capacity to reduce allocating
     space: Vec<bool>,
     next_space: Vec<bool>,
     age: usize,
-    observer: Observer,
+    pub observer: Observer,
     max_col: usize,
     max_row: usize,
-    col_buffer: Vec<usize>,
+    pub col_buffer: Vec<usize>,
 }
 
 impl Universe {
-    pub fn new(height: usize, width: usize) -> Self {
-        // minimum vector's size is 1 and cannot exced usize::MAX
+    pub fn new(height: usize, width: usize, init_space: Vec<bool>) -> Self {
+        // minimum vector's size is 9 and cannot exced usize::MAX
         let size = {
             if (height > 3) & (width > 3) {
                 height.checked_mul(width).unwrap_or_else(|| abort())
@@ -25,17 +24,24 @@ impl Universe {
                 abort()
             }
         };
+        let space: Vec<bool>;
+        let next_space: Vec<bool>;
+        if init_space.len() != size {
+            abort()
+        } else {
+            next_space = init_space.clone();
+            space = init_space;
+        }
         // the sum cannot be bigger than usize::MAX
-        let semiperimeter = height.checked_add(width).unwrap_or_else(|| abort());
+        height.checked_add(width).unwrap_or_else(|| abort());
         let max_col = width.checked_add_signed(-1).unwrap_or_else(|| abort());
         let max_row = height.checked_add_signed(-1).unwrap_or_else(|| abort());
         Self {
             height,
             width,
-            semiperimeter,
             size,
-            space: vec![false; size],
-            next_space: vec![false; size],
+            space,
+            next_space,
             age: 0usize,
             observer: Observer::new(&max_row, &max_col),
             max_col,
@@ -44,6 +50,9 @@ impl Universe {
         }
     }
 
+    pub fn get_space_raw(&self) -> &Vec<bool> {
+        &self.space
+    }
     pub fn read_at_location(&self, coordinate_i: &usize, coordinate_j: &usize) -> &bool {
         // if matrix_i, matrix_j in valid range;
         // then, (matrix_i * width) + matrix_j <= (width * height) <= usize::MAX. Maybe can use uncheck operations
@@ -73,6 +82,7 @@ impl Universe {
         }
     }
 
+    // tested
     fn map_col_sum(&self, coordinate_j: &usize) -> usize {
         let mut counter: usize = 0;
         for coordinate_i in &self.observer.map_row {
@@ -83,15 +93,14 @@ impl Universe {
         counter
     }
 
+    // tested
     fn init_buffer(&mut self) {
-        for coordinate_j in 0..3 {
-            *self
-                .col_buffer
-                .get_mut(coordinate_j)
-                .unwrap_or_else(|| abort()) = self.map_col_sum(&coordinate_j);
-        }
+        *self.col_buffer.get_mut(0).unwrap_or_else(|| abort()) = self.map_col_sum(&self.max_col);
+        *self.col_buffer.get_mut(1).unwrap_or_else(|| abort()) = self.map_col_sum(&0);
+        *self.col_buffer.get_mut(2).unwrap_or_else(|| abort()) = self.map_col_sum(&1);
     }
 
+    // tested
     fn shift_buffer(&mut self, coordinate_j: &usize, jump: bool) {
         if jump == true {
             self.init_buffer()
@@ -100,38 +109,47 @@ impl Universe {
                 take(self.col_buffer.get_mut(1).unwrap_or_else(|| abort()));
             *self.col_buffer.get_mut(1).unwrap_or_else(|| abort()) =
                 take(self.col_buffer.get_mut(2).unwrap_or_else(|| abort()));
-            *self.col_buffer.get_mut(3).unwrap_or_else(|| abort()) = self.map_col_sum(coordinate_j);
+            *self.col_buffer.get_mut(2).unwrap_or_else(|| abort()) = self.map_col_sum(coordinate_j);
         }
     }
 
-    fn time_step(&mut self) {
+    //tested
+    fn cell_step_check(&mut self, raw_index: usize) -> &bool {
+        // get the current cell cell coordinates and check its state
+        let current_i = self.observer.get_row(1);
+        let current_j = self.observer.get_col(1);
+        let current_cell_state = self.read_at_location(current_i, current_j);
+        // counts alive in the nine cells block
+        let mut sum = 0usize;
+        for val in self.col_buffer.iter() {
+            sum = sum.checked_add(*val).unwrap_or_else(|| abort());
+        }
+        // if the current cell is alive, remove the aditional count
+        if *current_cell_state == true {
+            sum = sum.checked_add_signed(-1).unwrap_or_else(|| abort());
+        } else {
+        }
+        // define the cell fate based on the rules, then stores the value in the next_space
+        let new_state = self.cell_fate(current_cell_state, &sum);
+        // asing new state to next space by vector index (not i,j coordinates)
+        *self
+            .next_space
+            .get_mut(raw_index)
+            .unwrap_or_else(|| abort()) = new_state;
+        // shifts the observer to next position, then shifts the buffer accordingly
+        let jump = self.observer.forward_view(&self.width, &self.height);
+        let coordinate_j = *self.observer.get_col(2);
+        self.shift_buffer(&coordinate_j, jump);
+
+        // ///////////// remember change the type to ()
+        self.next_space.get(raw_index).unwrap_or_else(|| abort())
+    }
+
+    pub fn time_step(&mut self) {
         self.observer.refresh(&self.max_col, &self.max_row);
         self.init_buffer();
-        for cell in 0..self.size {
-            // for each cell
-            // get the current cell cell coordinates and check its state
-            let current_i = self.observer.get_row(1);
-            let current_j = self.observer.get_col(1);
-            let current_cell_state = self.read_at_location(current_i, current_j);
-            // initializes the counter for the alive neighbours
-            let mut sum = 0usize;
-            // sum the value in the buffer; then, if current is true rest -1 to the counter
-            for val in self.col_buffer.iter() {
-                sum = sum.checked_add(*val).unwrap_or_else(|| abort());
-            }
-            if *current_cell_state == true {
-                sum = sum.checked_add_signed(-1).unwrap_or_else(|| abort());
-            } else {
-            }
-            // define the fate based on the rules, then stores the value in the next_space
-            let new_state = self.cell_fate(current_cell_state, &sum);
-            // add to next space
-            *self.next_space.get_mut(cell).unwrap_or_else(|| abort()) = new_state;
-            // forward the observer to next cell and read if there was a row jump
-            let jump = self.observer.forward_view(&self.width, &self.height);
-            // Now updates the buffer based on the new state of the observer
-            let coordinate_j = *self.observer.get_col(2);
-            self.shift_buffer(&coordinate_j, jump);
+        for raw_index in 0..self.size {
+            self.cell_step_check(raw_index);
         }
         // update number of generations
         self.age = self.age.saturating_add(1);
