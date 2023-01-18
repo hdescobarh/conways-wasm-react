@@ -1,6 +1,5 @@
 mod web;
-use crate::universe::Observer;
-use crate::universe::Universe;
+use crate::universe::*;
 
 #[test]
 fn it_works() {
@@ -16,7 +15,7 @@ fn test_observer_forward() {
     let max_row = height - 1;
     let max_col = width - 1;
 
-    let mut observer = Observer::new(&max_row, &max_col);
+    let mut observer = observer::Observer::new(&max_row, &max_col);
     assert_eq!(vec![max_col, 0, 1], observer.map_col);
     assert_eq!(vec![max_row, 0, 1], observer.map_row);
 
@@ -91,6 +90,7 @@ fn universe_single_time_step() {
     let mut universe = Universe::new(5, 5, init_space);
     universe.time_step();
     assert_eq!(space_one, *universe.get_space_raw());
+    assert_eq!(1, *universe.get_age());
 }
 
 #[test]
@@ -113,6 +113,7 @@ fn universe_pattern_a() {
     assert_eq!(space_t1, *universe.get_space_raw());
     universe.time_step();
     assert_eq!(space_t2, *universe.get_space_raw());
+    assert_eq!(2, *universe.get_age());
 }
 
 #[test]
@@ -162,6 +163,7 @@ fn universe_pattern_c() {
     assert_eq!(space_tn, *universe.get_space_raw());
     universe.time_step();
     assert_eq!(space_tn, *universe.get_space_raw());
+    assert_eq!(3, *universe.get_age());
 }
 
 #[test]
