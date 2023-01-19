@@ -1,4 +1,5 @@
-mod web;
+//#[cfg(target_arch = "wasm32")]
+pub mod web;
 use crate::universe::*;
 
 #[test]

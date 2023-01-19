@@ -55,6 +55,10 @@ impl Universe {
         &self.space
     }
 
+    pub fn get_single_value_by_raw_index(&self, index: usize) -> &bool {
+        &self.space.get(index).unwrap_or_else(|| abort())
+    }
+
     pub fn get_age(&self) -> &usize {
         &self.age
     }
