@@ -1,10 +1,9 @@
-use std::process::abort;
 #[cfg(test)]
 pub mod tests;
 pub mod universe;
 pub mod utils;
-
 use js_sys::Array;
+use std::process::abort;
 use wasm_bindgen::prelude::*;
 // use 2-glider_mess to make tests in web
 
@@ -17,7 +16,7 @@ pub struct Simulation {
 impl Simulation {
     pub fn new() -> Self {
         Self {
-            current_universe: universe::Universe::new(3, 3, vec![false; 9]),
+            current_universe: universe::Universe::new(4, 4, vec![false; 16]),
         }
     }
 
