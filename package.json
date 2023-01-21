@@ -18,8 +18,8 @@
     "build-prod": "webpack --mode production",
     "start": "webpack serve --mode development",
     "wasm-test": "cd wasm_module && wasm-pack test --chrome",
-    "wasm-build-dev": "cd wasm_module && wasm-pack build --dev --out-dir pkg",
-    "wasm-build-prod": "cd wasm_module && wasm-pack build --release --out-dir pkg",
+    "wasm-build-dev": "cd wasm_module && wasm-pack build --target web --dev --out-dir pkg",
+    "wasm-build-prod": "cd wasm_module && wasm-pack build --target web --release --out-dir pkg",
     "wasm-refresh-module": "rm -fr ./node_modules/conways-wasm && npm install conways-wasm"
   },
   "dependencies": {
