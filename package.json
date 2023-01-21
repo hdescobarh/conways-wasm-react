@@ -20,9 +20,10 @@
     "wasm-test": "cd wasm_module && wasm-pack test --chrome",
     "wasm-build-dev": "cd wasm_module && wasm-pack build --dev --out-dir pkg",
     "wasm-build-prod": "cd wasm_module && wasm-pack build --release --out-dir pkg",
-    "wasm-refresh-module": "rm -Force ./node_modules/conways-wasm && npm run wasm-build-dev && npm run install conways-wasm"
+    "wasm-refresh-module": "rm -fr ./node_modules/conways-wasm && npm install conways-wasm"
   },
   "dependencies": {
+    "conways-wasm": "file:wasm_module/pkg",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.2.4"
