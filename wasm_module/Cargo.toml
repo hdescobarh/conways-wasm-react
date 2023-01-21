@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Hans D. Escobar H. <escobar.hans@gmail.com>"]
 description = "wasm lib of Conway's game of Life"
-licence = "MIT"
+license = "MIT"
+keywords = ["simulation", "WebAssembly", "wasm", "game of Life"]
 
 # cdylib for *.wasm
 # rlib is necesary to perform unit tests with wasm-pack test
