@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { SimulationContext } from "../contexts/Simulation";
 
 export const Cell = (props) => {
-  const { index, key } = props;
+  const { index, alive } = props;
+
+  const cellStyle =
+    "flex h-2 w-2 border border-sky-300 justify-center items-center";
+
+  // Cell {index},{alive ? "T" : "F"}  // text-xs
   return (
-    <div className="flex h-10 w-10 items-center border border-sky-500 text-center text-xs">
-      Cell {index}
-    </div>
+    <div
+      className={`${cellStyle} ${alive ? " bg-red-500" : " bg-slate-50"}`}
+    ></div>
   );
 };

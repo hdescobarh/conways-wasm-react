@@ -1,22 +1,21 @@
-import React from "react";
+import React, { useContext, Fragment, useState } from "react";
 import { Grid } from "./components/Grid";
+import { Start } from "./components/Start";
+import { SimulationContext } from "./contexts/Simulation";
 
-class App extends React.Component {
-  // when simulation number changes, trigger each cell to check its state
-  // if does not change, stop
-
-  render() {
-    const { name } = this.props;
-    return (
-      <>
-        <h1 className="bg-black text-4xl text-white">Hello {name}!</h1>
-        <Grid
-          width="5"
-          height="5"
-        />
-      </>
-    );
-  }
-}
+const App = (props) => {
+  const { name } = props;
+  const { height, width } = useContext(SimulationContext);
+  return (
+    <Fragment>
+      <h1 className="bg-black text-4xl text-white">Hello {name}!</h1>
+      <Grid
+        width={height}
+        height={width}
+      />
+      <Start></Start>
+    </Fragment>
+  );
+};
 
 export default App;

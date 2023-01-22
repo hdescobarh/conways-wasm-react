@@ -1,8 +1,26 @@
-import React from "react";
+import React, { Fragment, useContext } from "react";
 import { Cell } from "./Cell";
+import { SimulationContext } from "../contexts/Simulation";
 
 export const Grid = (props) => {
   const { width, height } = props;
+  const { currentSimulation, generation } = useContext(SimulationContext);
+
+  function renderCell(index) {
+    let alive;
+    if (currentSimulation) {
+      alive = currentSimulation.get_cell_value(index);
+    } else {
+      alive = false;
+    }
+
+    return (
+      <Cell
+        index={index}
+        alive={alive}
+      ></Cell>
+    );
+  }
 
   function makeRenderList() {
     let index = 0;
@@ -11,13 +29,8 @@ export const Grid = (props) => {
     for (let i = 0; i < width; i++) {
       let rowList = [];
       for (let j = 0; j < height; j++) {
+        rowList.push(<Fragment key={j}>{renderCell(index)}</Fragment>);
         index++;
-        rowList.push(
-          <Cell
-            key={j}
-            index={index}
-          ></Cell>
-        );
       }
       gridList.push(
         <div
@@ -30,11 +43,12 @@ export const Grid = (props) => {
     }
     return gridList;
   }
+
   return (
     <div className="mb-8 flex flex-col items-center">
-      <p>
-        Grid {width}, {height}
-      </p>
+      <h2>
+        Grid {width}, {height}. Gen: {generation}
+      </h2>
       {makeRenderList()}
     </div>
   );
