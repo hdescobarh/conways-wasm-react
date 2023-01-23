@@ -1,16 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
-import { SimulationContext } from "../contexts/Simulation";
+import React, { memo } from "react";
 
-export const Cell = (props) => {
-  const { index, alive } = props;
+export const Cell = memo((props) => {
+  const { alive } = props;
 
   const cellStyle =
-    "flex h-2 w-2 border border-sky-300 justify-center items-center";
+    "flex h-2 w-2 border border-slate-300 justify-center items-center";
 
-  // Cell {index},{alive ? "T" : "F"}  // text-xs
   return (
     <div
-      className={`${cellStyle} ${alive ? " bg-red-500" : " bg-slate-50"}`}
+      className={`${cellStyle} ${alive ? " bg-rose-500" : " bg-slate-400"}`}
     ></div>
   );
-};
+});

@@ -1,38 +1,32 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Cell } from "./Cell";
 import { SimulationContext } from "../contexts/Simulation";
 
 export const Grid = (props) => {
   const { width, height } = props;
-  const { currentSimulation, generation } = useContext(SimulationContext);
+  const { currentSimulation, setGeneration, run, generation } =
+    useContext(SimulationContext);
 
-  function renderCell(index) {
-    let alive;
+  const setCellComponent = (index) => {
     if (currentSimulation) {
-      alive = currentSimulation.get_cell_value(index);
-    } else {
-      alive = false;
+      const alive = currentSimulation.get_cell_value(index);
+      return <Cell alive={alive}></Cell>;
     }
+  };
 
-    return (
-      <Cell
-        index={index}
-        alive={alive}
-      ></Cell>
-    );
-  }
+  const renderCells = () => {
+    let cellsToRender = new Array((width - 1) * (height - 1));
+    let currentIndex = 0;
 
-  function makeRenderList() {
-    let index = 0;
-    let gridList = [];
-    ///
     for (let i = 0; i < width; i++) {
-      let rowList = [];
+      let rowList = new Array(height - 1);
       for (let j = 0; j < height; j++) {
-        rowList.push(<Fragment key={j}>{renderCell(index)}</Fragment>);
-        index++;
+        rowList[j] = (
+          <Fragment key={j}>{setCellComponent(currentIndex)}</Fragment>
+        );
+        currentIndex++;
       }
-      gridList.push(
+      cellsToRender[i] = (
         <div
           key={i}
           className="flex"
@@ -41,15 +35,31 @@ export const Grid = (props) => {
         </div>
       );
     }
-    return gridList;
-  }
+    return cellsToRender;
+  };
+
+  useEffect(() => {
+    let interval = null;
+    if (run) {
+      interval = setInterval(() => {
+        let newGeneration = currentSimulation.time_step();
+        setGeneration(newGeneration);
+      }, 200);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [run]);
 
   return (
-    <div className="mb-8 flex flex-col items-center">
+    <div className="flex flex-col items-center bg-inherit pb-8">
       <h2>
-        Grid {width}, {height}. Gen: {generation}
+        Grid {width}, {height}. Status: {run ? "running" : "stopped"}. Gen:
+        {generation}
       </h2>
-      {makeRenderList()}
+      {renderCells()}
     </div>
   );
 };

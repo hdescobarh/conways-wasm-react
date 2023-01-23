@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(
   <React.StrictMode>
     <SimulationContextProvider>
-      <App name="Hansu" />
+      <App name="Rust WebAssembly 🦀 and React Conway's Game of Life" />
     </SimulationContextProvider>
   </React.StrictMode>
 );

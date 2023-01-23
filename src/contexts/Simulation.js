@@ -5,15 +5,15 @@ import init, { Simulation } from "conways-wasm";
 export const SimulationContext = createContext();
 const SimulationContextProvider = (props) => {
   const [currentSimulation, setCurrentSimulation] = useState(null);
-  const [running, setRunning] = useState(false);
   const [generation, setGeneration] = useState(0);
+  const [run, setRun] = useState(false);
   const [width, setWidth] = useState(100);
   const [height, setHeight] = useState(75);
 
-  function makeArray() {
+  function makeExample() {
     let array = new Array(7500);
     array.fill(false);
-    let start = 38 * width + 40;
+    let start = 25 * width + 40;
     for (let coordinate of [
       [2, 1],
       [3, 2],
@@ -32,25 +32,18 @@ const SimulationContextProvider = (props) => {
     return array;
   }
 
-  const space_init = makeArray();
-
   useEffect(() => {
     init().then(() => {
+      let space_init = makeExample();
       let startSimulation = Simulation.new();
       startSimulation.initialize_universe(height, width, space_init);
       setCurrentSimulation(startSimulation);
     });
   }, []);
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  const handleClick = async (event) => {
+  const handleClick = () => {
     if (currentSimulation) {
-      for (let i = 0; i <= 1000; i++) {
-        let x = currentSimulation.time_step();
-        setGeneration(x);
-        await delay(1);
-      }
+      setRun(!run);
     }
   };
 
@@ -62,6 +55,8 @@ const SimulationContextProvider = (props) => {
         currentSimulation,
         generation,
         handleClick,
+        run,
+        setGeneration,
       }}
     >
       {props.children}
