@@ -1,15 +1,16 @@
 {
   "name": "conways-game",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An Conway's game WebAssembly and React APT",
   "main": "index.js",
   "keywords": [
-    "react",
+    "React",
     "wasm",
     "WebAssembly",
-    "conway"
+    "conway",
+    "Rust"
   ],
-  "homepage": "https://github.com/hdescobarh/conways-wasm-react#readme",
+  "homepage": "https://github.com/hdescobarh/conways-wasm-react",
   "author": "Hans D. Escobar H. <escobar.hans@gmail.com>",
   "license": "MIT",
   "scripts": {
