@@ -1,9 +1,9 @@
 [package]
 name = "conways-wasm"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 authors = ["Hans D. Escobar H. <escobar.hans@gmail.com>"]
-description = "wasm lib of Conway's game of Life"
+description = "Wasm lib for Conway's game of Life"
 license = "MIT"
 keywords = ["simulation", "WebAssembly", "wasm", "game of Life"]
 repository = "https://github.com/hdescobarh/conways-rust-wasm"
@@ -32,7 +32,6 @@ panic = "abort"
 [profile.dev]
 lto = true # default in dev is false
 opt-level = 1 # default in dev is 0
-
 
 # example of custom profile
 [profile.release-custom-example]
