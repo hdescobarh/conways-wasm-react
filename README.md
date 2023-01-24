@@ -10,6 +10,8 @@
 
 A basic Conway's Game of Life exercise with WebAssembly and React. React deals with the DOM, and the Wasm module contains the logic. I wrote the WebAssembly with Rust 🦀; here is my Wasm module [repo](https://github.com/hdescobarh/conways-rust-wasm).
 
+An example release build can be found in [dist](https://github.com/hdescobarh/conways-wasm-react/tree/main/dist)
+
 ## References
 
 - Project's initial configuration template was generated with [createapp.dev](https://createapp.dev/).
